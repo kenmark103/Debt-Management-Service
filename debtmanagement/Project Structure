@@ -1,0 +1,84 @@
+backend/
+├── auth-service/              # Handles user authentication & JWT
+│   └── src/
+│       ├── controllers/       # Handles API requests related to authentication
+│       │   └── AuthController.java       # Login, Registration endpoints
+│       ├── services/          # Business logic for user authentication, token generation
+│       │   └── AuthService.java          # Handles user authentication and JWT token management
+│       │   └── UserService.java          # Handles user creation, role assignment
+│       ├── repositories/      # Data access for users and roles
+│       │   └── UserRepository.java       # CRUD operations for User entities
+│       │   └── RoleRepository.java       # CRUD operations for Role entities
+│       ├── components/        # JWT utility, token filters
+│       │   └── JwtTokenProvider.java     # JWT creation, validation
+│       │   └── JwtAuthFilter.java        # Filter to verify JWT token in requests
+│       └── config/            # Spring Security, JWT configurations
+│           └── SecurityConfig.java       # Security configuration (role-based access control, token filter)
+│           └── JwtConfig.java            # JWT configuration for secret key, token expiration
+│
+├── license-service/           # Handles license validation
+│   └── src/
+│       ├── controllers/       # License validation endpoints
+│       │   └── LicenseController.java    # Endpoints for validating, registering licenses
+│       ├── services/          # Business logic for license validation and management
+│       │   └── LicenseService.java       # License validation, registration logic
+│       ├── repositories/      # Data access for license information
+│       │   └── LicenseRepository.java    # CRUD operations for License entities
+│       ├── middleware/        # License validation filter
+│       │   └── LicenseValidationFilter.java  # Filter to validate license before proceeding with requests
+│       └── components/        # License key generators, validation logic
+│           └── LicenseKeyGenerator.java  # Generate new license keys
+│           └── LicenseValidator.java     # Validate license key logic
+│
+├── sync-service/              # Handles database synchronization
+│   └── src/
+│       ├── controllers/       # Endpoints for triggering sync operations
+│       │   └── SyncController.java       # API for initiating sync and checking sync status
+│       ├── services/          # Sync logic for local and remote databases
+│       │   └── SyncService.java          # Business logic for handling synchronization
+│       ├── repositories/      # Access to local and central databases
+│       │   └── LocalDataRepository.java  # Repository for accessing local data
+│       │   └── CentralDataRepository.java # Repository for syncing to central database
+│       ├── events/            # Event handling for data sync, CQRS read/write separation
+│       │   └── DataSyncEvent.java        # Event class triggered during data sync operations
+│       └── schedulers/        # Task schedulers for periodic sync operations
+│           └── SyncScheduler.java        # Schedule sync tasks at regular intervals
+│
+├── task-service/              # Handles tasks and notifications
+│   └── src/
+│       ├── controllers/       # Task and notification-related endpoints
+│       │   └── TaskController.java       # Endpoints for task creation, notification sending
+│       ├── services/          # Business logic for task management and notification delivery
+│       │   └── TaskService.java          # Manage task lifecycle (create, update, delete)
+│       │   └── NotificationService.java  # Send notifications (email, SMS, etc.)
+│       ├── repositories/      # Data access for tasks and notifications
+│       │   └── TaskRepository.java       # CRUD operations for Task entities
+│       │   └── NotificationRepository.java # Access to notifications
+│       ├── events/            # Event-driven actions (e.g., notify when task is created)
+│       │   └── TaskCreatedEvent.java     # Event triggered when a new task is created
+│       └── components/        # Notification dispatchers, task schedulers
+│           └── NotificationDispatcher.java # Dispatch notifications (email, SMS, etc.)
+│           └── TaskScheduler.java        # Schedule task-related jobs
+│
+├── api-gateway/               # Single entry point to microservices
+│   └── src/
+│       ├── filters/           # API gateway filters (e.g., for routing, authentication)
+│       │   └── GatewayAuthFilter.java    # Gateway filter for checking authentication before forwarding
+│       ├── routes/            # Routes configuration for forwarding requests to services
+│       │   └── RouteConfig.java          # Routing configuration for mapping API paths to services
+│       ├── controllers/       # Gateway-related endpoints
+│       │   └── GatewayController.java    # Admin endpoints for managing gateway routes
+│       └── config/            # API Gateway configurations (e.g., Zuul, Spring Cloud Gateway)
+│           └── GatewayConfig.java        # Configuration class for API gateway behavior
+│
+└── common/                    # Shared code (DTOs, events)
+    └── src/
+        ├── dtos/              # Data transfer objects shared across services
+        │   └── UserDto.java               # DTO for user data (name, email, etc.)
+        │   └── TaskDto.java               # DTO for task-related data
+        ├── events/            # Event classes for triggering actions (e.g., sync events)
+        │   └── TaskEvent.java             # Common event for task-related actions
+        │   └── SyncEvent.java             # Common event for sync-related actions
+        └── utils/             # Utility classes (e.g., error handling, common functions)
+            └── ErrorResponse.java         # Common error response structure
+            └── Constants.java             # Shared constants (e.g., API paths, error codes)
