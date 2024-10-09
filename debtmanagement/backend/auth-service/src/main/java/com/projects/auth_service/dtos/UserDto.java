@@ -1,6 +1,9 @@
 package com.projects.auth_service.dtos;
 
+import java.util.UUID;
+
 public class UserDto {
+    private UUID id;
     private String username;
     private String password;
     private String email;
@@ -37,5 +40,13 @@ public class UserDto {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public void setId(UUID id){
+        this.id=id;
+
+    }
+    public UUID getId() {
+       return id;
     }
 }
