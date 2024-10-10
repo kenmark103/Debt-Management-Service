@@ -1,4 +1,3 @@
-Here's a template for your **Debt Management Service** project README file. You can adjust the details based on your specific implementation:
 
 ---
 
