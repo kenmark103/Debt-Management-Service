@@ -8,7 +8,7 @@ import org.testcontainers.utility.DockerImageName;
 
 @TestConfiguration(proxyBeanMethods = false)
 class TestcontainersConfiguration {
-
+	@SuppressWarnings("unused")
 	@Bean
 	@ServiceConnection
 	MySQLContainer<?> mysqlContainer() {
