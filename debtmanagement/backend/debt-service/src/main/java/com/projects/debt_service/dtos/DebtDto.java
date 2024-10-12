@@ -2,11 +2,17 @@ package com.projects.debt_service.dtos;
 
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
+import com.projects.debt_service.models.Payment;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 public class DebtDto {
     @Id
@@ -16,6 +22,9 @@ public class DebtDto {
     private BigDecimal amount;
     private String description;
     private boolean isSettled;
+    
+    @OneToMany(mappedBy = "debt", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Payment> payments;
 
     // Getters and Setters
 
@@ -56,5 +65,12 @@ public class DebtDto {
 
     public Boolean isSettled() {
         return isSettled;
+    }
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
     }
 }

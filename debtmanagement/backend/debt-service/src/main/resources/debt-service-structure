@@ -1,0 +1,58 @@
+debt-service/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── projects/
+│   │   │           └── debt_service/
+│   │   │               ├── controllers/
+│   │   │               │   └── DebtController.java
+│   │   │               │   └── PaymentController.java
+│   │   │               │   
+│   │   │               ├── services/
+│   │   │               │   └── DebtService.java
+│   │   │               │   └── PaymentService.java
+│   │   │               │   └── NotificationService.java
+│   │   │               │   
+│   │   │               ├── repositories/
+│   │   │               │   └── DebtRepository.java
+│   │   │               │   └── PaymentRepository.java
+│   │   │               │   
+│   │   │               ├── clients/
+│   │   │               │   └── AuthServiceClient.java   # Client to interact with the auth-service for user-related actions
+│   │   │               │   
+│   │   │               ├── events/
+│   │   │               │   └── DebtCreatedEvent.java
+│   │   │               │   └── PaymentMadeEvent.java
+│   │   │               │   
+│   │   │               ├── components/
+│   │   │               │   └── NotificationDispatcher.java   # To dispatch notifications after certain events
+│   │   │               │   
+│   │   │               ├── dtos/
+│   │   │               │   └── DebtDto.java
+│   │   │               │   └── PaymentDto.java
+│   │   │               │   
+│   │   │               ├── config/
+│   │   │               │   └── SecurityConfig.java      # Security configurations for debt service
+│   │   │               │   └── DebtConfig.java          # General configurations for the debt service
+│   │   │               │   
+│   │   │               ├── models/
+│   │   │               │   └── Debt.java                # Entity representing debt details
+│   │   │               │   └── Payment.java             # Entity representing payment details
+│   │   │               │   
+│   │   │               ├── utils/
+│   │   │               │   └── DebtUtils.java           # Utility methods for debt-related calculations
+│   │   │               │   
+│   │   │               └── exceptions/
+│   │   │                   └── ResourceNotFoundException.java  # Custom exception for not found resources
+│   │   │
+│   │   └── resources/
+│   │       ├── application.properties                   # Configuration properties (database, server, etc.)
+│   │       └── logback-spring.xml                       # Logging configuration
+│   ├── test/
+│       └── java/
+│           └── com/
+│               └── projects/
+│                   └── debt_service/
+│                       └── DebtServiceTests.java        # Unit and integration tests for the service
+└── pom.xml                                               # Maven build configuration

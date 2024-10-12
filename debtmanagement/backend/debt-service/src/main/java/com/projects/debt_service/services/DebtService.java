@@ -1,4 +1,5 @@
 package com.projects.debt_service.services;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,13 +10,18 @@ import com.projects.auth_service.dtos.UserDto;
 import com.projects.debt_service.clients.AuthServiceClient;
 import com.projects.debt_service.dtos.DebtDto;
 import com.projects.debt_service.models.Debt;
+import com.projects.debt_service.models.Payment;
 import com.projects.debt_service.repositories.DebtRepository;
+import com.projects.debt_service.repositories.PaymentRepository;
+import com.projects.debt_service.utils.DebtUtils;
 
 @Service
 public class DebtService {
 
     @Autowired
     private DebtRepository debtRepository;
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     @Autowired
     private AuthServiceClient authServiceClient; // Client to interact with auth service
@@ -69,4 +75,17 @@ public class DebtService {
         dto.setSettled(debt.isSettled());
         return dto;
     }
+
+    public BigDecimal calculateDebtBalance(UUID debtId) {
+    Debt debt = debtRepository.findById(debtId)
+        .orElseThrow(() -> new RuntimeException("Debt not found"));
+
+    List<Payment> payments = paymentRepository.findByDebtId(debtId);
+    BigDecimal totalPaid = payments.stream()
+        .map(Payment::getAmountPaid)
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+    return DebtUtils.calculateRemainingBalance(debt.getAmount(), totalPaid);
+}
+
 }

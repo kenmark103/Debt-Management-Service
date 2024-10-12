@@ -60,6 +60,19 @@ backend/
 │           └── NotificationDispatcher.java # Dispatch notifications (email, SMS, etc.)
 │           └── TaskScheduler.java        # Schedule task-related jobs
 │
+├── debt-service/              # Handles debt management operations
+│   └── src/
+│       ├── controllers/       # Endpoints for managing debts
+│       │   └── DebtController.java       # Endpoints for creating, updating, and retrieving debt records
+│       ├── services/          # Business logic for managing debts
+│       │   └── DebtService.java          # Handles debt calculations, repayments, and queries
+│       ├── repositories/      # Data access for debt records
+│       │   └── DebtRepository.java       # CRUD operations for Debt entities
+│       ├── events/            # Events related to debt actions
+│       │   └── DebtCreatedEvent.java     # Event triggered when a new debt record is created
+│       └── components/        # Utility classes for debt management
+│           └── DebtCalculator.java       # Logic for calculating interest and repayments
+│
 ├── api-gateway/               # Single entry point to microservices
 │   └── src/
 │       ├── filters/           # API gateway filters (e.g., for routing, authentication)
@@ -76,9 +89,11 @@ backend/
         ├── dtos/              # Data transfer objects shared across services
         │   └── UserDto.java               # DTO for user data (name, email, etc.)
         │   └── TaskDto.java               # DTO for task-related data
+        │   └── DebtDto.java                # DTO for debt-related data
         ├── events/            # Event classes for triggering actions (e.g., sync events)
         │   └── TaskEvent.java             # Common event for task-related actions
-        │   └── SyncEvent.java             # Common event for sync-related actions
+        │   └── SyncEvent.java              # Common event for sync-related actions
+        │   └── DebtEvent.java              # Common event for debt-related actions
         └── utils/             # Utility classes (e.g., error handling, common functions)
             └── ErrorResponse.java         # Common error response structure
             └── Constants.java             # Shared constants (e.g., API paths, error codes)
