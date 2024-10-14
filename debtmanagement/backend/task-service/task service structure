@@ -1,0 +1,20 @@
+task-notification-service/
+├── src/
+│   ├── controllers/
+│   │   └── TaskNotificationController.java
+│   ├── services/
+│   │   └── TaskService.java
+│   │   └── NotificationService.java
+│   ├── repositories/
+│   │   └── TaskRepository.java
+│   ├── models/
+│   │   └── Task.java
+│   │   └── Notification.java
+│   ├── events/
+│   │   └── DebtCreatedEventListener.java
+│   │   └── PaymentMadeEventListener.java
+│   ├── templates/
+│   │   └── NotificationTemplates.java
+│   └── utils/
+│       └── ErrorResponse.java
+│       └── Constants.java

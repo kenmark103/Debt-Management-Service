@@ -22,6 +22,7 @@ public class Debt {
     private LocalDate createdAt;
     private LocalDate updatedAt;
     private boolean settled;
+    private boolean defaulted;
 
     // Getters and Setters
 
@@ -86,5 +87,11 @@ public class Debt {
 
     public LocalDate getUpdatedAt() {
         return updatedAt;
+    }
+    public boolean isDefaulted() {
+        return defaulted;
+    }
+    public void setDefaulted(Boolean defaulted) {
+        this.defaulted = defaulted;
     }
 }

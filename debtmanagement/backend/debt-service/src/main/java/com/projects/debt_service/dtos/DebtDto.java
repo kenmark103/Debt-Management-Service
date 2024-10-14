@@ -22,6 +22,7 @@ public class DebtDto {
     private BigDecimal amount;
     private String description;
     private boolean isSettled;
+    private boolean defaulted;
     
     @OneToMany(mappedBy = "debt", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Payment> payments;
@@ -72,5 +73,12 @@ public class DebtDto {
 
     public void setPayments(List<Payment> payments) {
         this.payments = payments;
+    }
+
+    public boolean isDefaulted() {
+        return defaulted;
+    }
+    public void setDefaulted(Boolean defaulted) {
+        this.defaulted = defaulted;
     }
 }

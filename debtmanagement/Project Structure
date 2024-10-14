@@ -97,3 +97,43 @@ backend/
         └── utils/             # Utility classes (e.g., error handling, common functions)
             └── ErrorResponse.java         # Common error response structure
             └── Constants.java             # Shared constants (e.g., API paths, error codes)
+frontend/
+├── public/
+│   ├── index.html             # Main HTML file
+│   ├── favicon.ico            # Favicon
+│   └── assets/                # Static assets (images, fonts, etc.)
+│       ├── images/
+│       └── fonts/
+├── src/
+│   ├── components/            # Reusable UI components
+│   │   ├── Button/            # Button component
+│   │   ├── Modal/             # Modal component
+│   │   ├── Input/             # Input component
+│   │   └── ...                # Other shared components
+│   ├── pages/                 # Page components (views)
+│   │   ├── Home/              # Home page
+│   │   ├── Dashboard/         # Dashboard page
+│   │   ├── Login/             # Login page
+│   │   ├── Register/          # Registration page
+│   │   ├── DebtManagement/     # Debt management page
+│   │   ├── Payment/           # Payment processing page
+│   │   └── ...                # Other pages
+│   ├── context/               # Context API for global state management
+│   │   └── AuthContext.js     # Authentication context
+│   ├── hooks/                 # Custom hooks
+│   │   └── useFetch.js        # Example hook for fetching data
+│   ├── services/              # API service calls
+│   │   ├── authService.js     # Authentication API calls
+│   │   ├── debtService.js     # Debt-related API calls
+│   │   └── paymentService.js   # Payment-related API calls
+│   ├── styles/                # Global styles (CSS or SCSS)
+│   │   └── App.scss           # Main styles for the application
+│   ├── utils/                 # Utility functions
+│   │   └── constants.js       # Constants used throughout the app
+│   ├── App.js                 # Main App component
+│   ├── index.js               # Entry point of the application
+│   └── routes/                # React Router setup
+│       └── AppRoutes.js       # Route definitions
+├── .env                       # Environment variables
+├── package.json               # Project metadata and dependencies
+└── README.md                  # Project documentation

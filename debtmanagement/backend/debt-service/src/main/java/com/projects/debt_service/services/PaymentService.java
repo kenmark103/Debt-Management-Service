@@ -1,5 +1,11 @@
 package com.projects.debt_service.services;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.projects.auth_service.dtos.UserDto;
 import com.projects.debt_service.clients.AuthServiceClient;
 import com.projects.debt_service.dtos.PaymentDto;
@@ -7,11 +13,6 @@ import com.projects.debt_service.models.Debt;
 import com.projects.debt_service.models.Payment;
 import com.projects.debt_service.repositories.DebtRepository;
 import com.projects.debt_service.repositories.PaymentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.util.UUID;
 
 @Service
 public class PaymentService {

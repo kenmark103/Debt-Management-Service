@@ -3,8 +3,8 @@ package com.projects.debt_service.events;
 import java.util.UUID;
 
 public class PaymentMadeEvent {
-    private UUID paymentId;
-    private UUID debtId;
+    private final UUID paymentId;
+    private final UUID debtId;
 
     public PaymentMadeEvent(UUID paymentId, UUID debtId) {
         this.paymentId = paymentId;
