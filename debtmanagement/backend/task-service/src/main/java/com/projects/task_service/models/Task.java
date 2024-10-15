@@ -1,9 +1,10 @@
 package com.projects.task_service.models;
 
+import java.time.LocalDate;
+
 import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import java.time.LocalDate;
 
 @Entity
 public class Task {
