@@ -2,12 +2,14 @@ package com.projects.auth_service.components;
 
 import java.io.IOException;
 
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.projects.auth_service.services.UserService;
@@ -16,12 +18,18 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+@Component
 public class JwtAuthFilter extends OncePerRequestFilter {
-     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    
+    private final JwtTokenProvider jwtTokenProvider;
+    @Lazy
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
+    public JwtAuthFilter(JwtTokenProvider jwtTokenProvider, UserService userService) {
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.userService = userService;
+    }
 
      @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain) throws IOException, jakarta.servlet.ServletException {

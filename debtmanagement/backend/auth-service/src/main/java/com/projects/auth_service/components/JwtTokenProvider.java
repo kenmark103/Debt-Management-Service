@@ -13,6 +13,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 
 @Component
 public class JwtTokenProvider {
@@ -20,14 +21,18 @@ public class JwtTokenProvider {
     private String secretString;
 
     @Value("${jwt.expiration}")
-    private final Date expirationTime;
+    private Long expirationTimeInMs;
 
-    private final SecretKey secretKey;
+    private Date expirationTime ;
 
-    public JwtTokenProvider(){
-        long expirationTimeInMs = 3600000; // Set sexpiration to 1 hour
-        this.expirationTime = new Date(System.currentTimeMillis() + expirationTimeInMs);
+    private SecretKey secretKey;
+
+    public JwtTokenProvider(){}
+
+    @PostConstruct
+    public void init() {
         this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(secretString));
+        this.expirationTime = new Date(System.currentTimeMillis() + expirationTimeInMs);
     }
 
     // Generate JWT token
@@ -71,5 +76,10 @@ public class JwtTokenProvider {
         .parseSignedClaims(token);
         String role = (String)parsed.getPayload().get("Role");
         return role;
+    }
+
+    public Date getExpirationTime() {
+        // Set expiration based on the injected value
+        return new Date(System.currentTimeMillis() + expirationTimeInMs);
     }
 }
