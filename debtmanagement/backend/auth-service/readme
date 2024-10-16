@@ -1,0 +1,99 @@
+README for Auth Service
+Auth Service
+Overview
+The Auth Service is responsible for managing user authentication and authorization. It provides endpoints for user registration, login, and JWT token generation. The service also implements role-based access control (RBAC) and works with tokens to secure communication across microservices.
+
+Key Features
+User Registration and Login: Supports creating new users and authenticating them.
+JWT Token Generation: Issues JWT tokens to authenticated users.
+Role-Based Access Control (RBAC): Enforces user roles for securing endpoints.
+Token Validation: Validates incoming JWT tokens to ensure authorized access.
+Tree Structure
+bash
+Copy code
+auth-service/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── auth/
+│   │   │           ├── controllers/
+│   │   │           │   └── AuthController.java
+│   │   │           ├── services/
+│   │   │           │   ├── AuthService.java
+│   │   │           │   └── UserService.java
+│   │   │           ├── repositories/
+│   │   │           │   ├── UserRepository.java
+│   │   │           │   └── RoleRepository.java
+│   │   │           ├── components/
+│   │   │           │   ├── JwtTokenProvider.java
+│   │   │           │   └── JwtAuthFilter.java
+│   │   │           └── config/
+│   │   │               ├── SecurityConfig.java
+│   │   │               └── JwtConfig.java
+├── resources/
+│   └── application.properties
+└── pom.xml
+Components Explanation
+AuthController.java
+
+Handles HTTP requests for authentication operations like user registration and login.
+Issues JWT tokens on successful login.
+AuthService.java
+
+Contains the core business logic for handling authentication and token generation.
+Communicates with JwtTokenProvider for issuing tokens.
+UserService.java
+
+Manages user-related operations such as fetching user details and saving new users.
+Interacts with the UserRepository to persist user data.
+JwtTokenProvider.java
+
+Generates JWT tokens and validates incoming tokens.
+Extracts claims like username and roles from tokens.
+JwtAuthFilter.java
+
+A security filter that intercepts incoming requests, extracts JWT tokens, and validates them.
+Ensures only authenticated users can access protected resources.
+SecurityConfig.java
+
+Configures Spring Security to secure the application using the JWT filter.
+Defines which endpoints require authentication and which are publicly accessible.
+application.properties
+
+Contains configuration properties for the Auth Service, such as JWT secret keys and token expiration settings.
+How It Works
+User Registration:
+
+Users can register by sending a POST request to the /auth/register endpoint.
+Their credentials are stored in the UserRepository.
+JWT Token Generation:
+
+After login, a JWT token is issued and sent to the client.
+The token contains encoded user details and roles, which are used for subsequent requests.
+Token Validation:
+
+Incoming requests must include the JWT token in the Authorization header.
+The JwtAuthFilter extracts and validates the token, ensuring the request is authorized.
+Endpoints
+/auth/register: Registers a new user.
+/auth/login: Authenticates a user and returns a JWT token.
+/auth/validate: Validates a JWT token (optional endpoint, can be used by other services to verify tokens).
+How to Run
+Ensure Maven and Java 21 are installed on your system.
+
+Run the following Maven command to build the project:
+
+bash
+Copy code
+mvn clean install
+Start the application by running:
+
+bash
+Copy code
+mvn spring-boot:run
+The Auth Service will be available on localhost:8081.
+
+Future Enhancements
+OAuth Integration: Support for third-party OAuth providers like Google and Facebook.
+Token Revocation: Implement token blacklisting for improved security.

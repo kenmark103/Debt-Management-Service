@@ -1,0 +1,70 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "ApiGatewayServiceApplication",
+            "request": "launch",
+            "mainClass": "com.projects.api_gateway_service.ApiGatewayServiceApplication",
+            "projectName": "api-gateway-service"
+        },
+        {
+            "type": "java",
+            "name": "CircuitBreakerAll",
+            "request": "launch",
+            "mainClass": "com.projects.api_gateway_service.components.CircuitBreakerAll",
+            "projectName": "api-gateway-service"
+        },
+        {
+            "type": "java",
+            "name": "AuthServiceApplication",
+            "request": "launch",
+            "mainClass": "com.projects.auth_service.AuthServiceApplication",
+            "projectName": "auth-service"
+        },
+        {
+            "type": "java",
+            "name": "TestAuthServiceApplication",
+            "request": "launch",
+            "mainClass": "com.projects.auth_service.TestAuthServiceApplication",
+            "projectName": "auth-service"
+        },
+        {
+            "type": "java",
+            "name": "DebtServiceApplication",
+            "request": "launch",
+            "mainClass": "com.projects.debt_service.DebtServiceApplication",
+            "projectName": "debt-service"
+        },
+        {
+            "type": "java",
+            "name": "ExpenseServiceApplication",
+            "request": "launch",
+            "mainClass": "com.projects.expense_service.ExpenseServiceApplication",
+            "projectName": "expense-service"
+        },
+        {
+            "type": "java",
+            "name": "LicenseServiceApplication",
+            "request": "launch",
+            "mainClass": "com.projects.license_service.LicenseServiceApplication",
+            "projectName": "license-service"
+        },
+        {
+            "type": "java",
+            "name": "TaskServiceApplication",
+            "request": "launch",
+            "mainClass": "com.projects.task_service.TaskServiceApplication",
+            "projectName": "task-service"
+        }
+    ]
+}

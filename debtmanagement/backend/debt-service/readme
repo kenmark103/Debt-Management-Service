@@ -1,0 +1,75 @@
+README for Debt Service
+Debt Service
+Overview
+The Debt Service handles the management of user debts. It provides endpoints for creating, retrieving, and updating debts. It works in conjunction with the Auth Service to secure endpoints and ensures that only authorized users can manage their debts.
+
+Key Features
+Debt Management: Allows users to add, update, and view debts.
+Authentication: Requires JWT tokens for all debt-related actions.
+Feign Client: Integrates with other services using Feign for communication.
+Tree Structure
+bash
+Copy code
+debt-service/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── debt/
+│   │   │           ├── controllers/
+│   │   │           │   └── DebtController.java
+│   │   │           ├── services/
+│   │   │           │   └── DebtService.java
+│   │   │           ├── repositories/
+│   │   │           │   └── DebtRepository.java
+│   │   │           └── config/
+│   │   │               └── SecurityConfig.java
+├── resources/
+│   └── application.properties
+└── pom.xml
+Components Explanation
+DebtController.java
+
+Handles incoming HTTP requests related to debt management.
+Secures endpoints by requiring JWT tokens.
+DebtService.java
+
+Implements the business logic for creating and updating debts.
+Communicates with the DebtRepository for database operations.
+DebtRepository.java
+
+Provides access to the debt database.
+Stores and retrieves debt records.
+SecurityConfig.java
+
+Configures Spring Security to protect debt-related endpoints.
+Requires authentication for all actions related to debts.
+How It Works
+Debt Management:
+
+Users can create and manage debts through authenticated API requests.
+The service validates JWT tokens before allowing access to debt-related operations.
+Inter-Service Communication:
+
+Uses Feign Client to communicate with the Auth Service to validate user information.
+Endpoints
+/api/debts/: CRUD operations for user debts
+
+How to Run
+Ensure Maven and Java 21 are installed on your system.
+
+Run the following Maven command to build the project:
+
+bash
+Copy code
+mvn clean install
+Start the application by running:
+
+bash
+Copy code
+mvn spring-boot:run
+The Debt Service will be available on localhost:8082.
+
+Future Enhancements
+Debt Notifications: Implement notifications for users when their debt changes.
+Debt History: Add the ability to track and display debt history.

@@ -1,0 +1,67 @@
+README for License Service
+License Service
+Overview
+The License Service is responsible for generating and validating licenses. It provides functionality for license creation and license key validation across services.
+
+Key Features
+License Creation: Generate licenses for users.
+License Validation: Validate licenses for API requests.
+Tree Structure
+bash
+Copy code
+license-service/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── license/
+│   │   │           ├── controllers/
+│   │   │           │   └── LicenseController.java
+│   │   │           ├── services/
+│   │   │           │   └── LicenseService.java
+│   │   │           ├── repositories/
+│   │   │           │   └── LicenseRepository.java
+│   │   │           └── middleware/
+│   │   │               └── LicenseValidationFilter.java
+├── resources/
+│   └── application.properties
+└── pom.xml
+Components Explanation
+LicenseController.java
+
+Manages API endpoints for creating and validating licenses.
+LicenseService.java
+
+Implements business logic for license generation and validation.
+LicenseRepository.java
+
+Interacts with the database to store and retrieve license information.
+LicenseValidationFilter.java
+
+A filter that intercepts requests to check for a valid license key.
+How It Works
+License Creation:
+License keys are created by the License Service and stored in the database.
+License Validation:
+The API Gateway or other services send requests with the license key.
+The License Service validates the key before allowing further action.
+Endpoints
+/api/licenses/: CRUD operations for license management.
+How to Run
+Ensure Maven and Java 21 are installed on your system.
+
+Run the following Maven command to build the project:
+
+bash
+Copy code
+mvn clean install
+Start the application by running:
+
+bash
+Copy code
+mvn spring-boot:run
+The License Service will be available on localhost:8083.
+
+Future Enhancements
+License Renewal: Add functionality for license renewal.
+License Expiration: Implement expiration dates and notifications for licenses.
