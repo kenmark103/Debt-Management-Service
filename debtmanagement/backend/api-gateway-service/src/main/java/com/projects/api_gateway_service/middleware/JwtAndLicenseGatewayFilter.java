@@ -1,5 +1,8 @@
 package com.projects.api_gateway_service.middleware;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,11 @@ public class JwtAndLicenseGatewayFilter extends AbstractGatewayFilterFactory<Jwt
 
     private final JwtTokenProvider jwtTokenProvider; // Assuming you have this from auth service
     private final WebClient webClient;
+    
+    private final List<String> publicPaths = Arrays.asList("/api/auth/register", "/api/auth/login", "/api/license/purchase");
+    private final List<String> authOnlyPaths = Arrays.asList("/api/license/status", "/api/user/profile");
+
+
 
     public JwtAndLicenseGatewayFilter(JwtTokenProvider jwtTokenProvider, WebClient.Builder webClientBuilder) {
         super(Config.class);
@@ -31,23 +39,43 @@ public class JwtAndLicenseGatewayFilter extends AbstractGatewayFilterFactory<Jwt
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
-            // 1. Validate JWT Token
-            String token = getJwtFromRequest(exchange);
-            if (token == null || !jwtTokenProvider.validateToken(token)) {
-                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                return exchange.getResponse().setComplete();
+            String path = exchange.getRequest().getURI().getPath();
+            
+            if (isPublicPath(path)) {
+                return chain.filter(exchange);
             }
 
-            // 2. Validate License Key
-            String licenseKey = exchange.getRequest().getHeaders().getFirst("License-Key");
-            if (licenseKey == null || !isValidLicense(licenseKey)) {
-                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                return exchange.getResponse().setComplete();
-            }
-
-            // If both validations pass, continue with the request
-            return chain.filter(exchange);
+            return validateJwt(exchange)
+                .flatMap(username -> {
+                    if (isAuthOnlyPath(path)) {
+                        return chain.filter(exchange);
+                    }
+                    return validateLicense(username).then();
+                })
+                .then(chain.filter(exchange))
+                .onErrorResume(UnauthorizedException.class, e -> {
+                    exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                    return exchange.getResponse().writeWith(
+                        Mono.just(exchange.getResponse().bufferFactory().wrap(e.getMessage().getBytes()))
+                    );
+                });
         };
+    }
+
+    private boolean isPublicPath(String path) {
+        return publicPaths.stream().anyMatch(path::startsWith);
+    }
+
+    private boolean isAuthOnlyPath(String path) {
+        return authOnlyPaths.stream().anyMatch(path::startsWith);
+    }
+
+    private Mono<String> validateJwt(ServerWebExchange exchange) {
+        String token = getJwtFromRequest(exchange);
+        if (token == null || !jwtTokenProvider.validateToken(token)) {
+            return Mono.error(new UnauthorizedException("Invalid or missing JWT token"));
+        }
+        return Mono.just(jwtTokenProvider.getUsernameFromToken(token));
     }
 
     // Helper method to extract JWT token from the request headers
@@ -60,16 +88,24 @@ public class JwtAndLicenseGatewayFilter extends AbstractGatewayFilterFactory<Jwt
     }
 
     // License validation via License Service
-    private boolean isValidLicense(String licenseKey) {
-        // Example using WebClient to validate the license with the license service
-        String licenseServiceUrl = "http://license-service/api/licenses/validate?licenseKey=" + licenseKey;
-
-        Mono<Boolean> isValid = webClient.get()
+    private Mono<Boolean> validateLicense(String username) {
+        String licenseServiceUrl = "http://license-service/api/licenses/validate?username=" + username;
+        return webClient.get()
                 .uri(licenseServiceUrl)
                 .retrieve()
-                .bodyToMono(Boolean.class);
-
-        // Return the license validation result
-        return isValid.block(); // Blocking call, adjust based on your need
+                .bodyToMono(Boolean.class)
+                .flatMap(isValid -> {
+                    if (!isValid) {
+                        return Mono.error(new UnauthorizedException("Invalid license for user"));
+                    }
+                    return Mono.just(true);
+                });
     }
+
+    private static class UnauthorizedException extends RuntimeException {
+        public UnauthorizedException(String message) {
+            super(message);
+        }
+    }
+
 }
