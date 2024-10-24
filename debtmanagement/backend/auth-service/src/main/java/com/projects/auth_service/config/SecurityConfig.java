@@ -8,8 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -28,29 +26,26 @@ public class SecurityConfig {
         this.userService = userService;
     }
 
-    // Bean for PasswordEncoder
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     // Bean for SecurityFilterChain (Replaces WebSecurityConfigurerAdapter)
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable()) // Disable CSRF protection
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/auth/**").permitAll()  // Permit all auth requests (login/register)
+                .requestMatchers("/auth/**", "/h2-console/**").permitAll()  // Permit all auth requests and H2 console
                 .requestMatchers("/admin/**").hasRole("ADMIN")  // Only ADMIN can access /admin
                 .anyRequest().authenticated()  // All other requests require authentication
             )
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // JWT filter before UsernamePasswordAuthenticationFilter
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Make session stateless
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .headers(headers -> headers
+                .frameOptions(frameOptions -> frameOptions.sameOrigin())); // Allow frames from same origin for H2 console
         
         return http.build();
     }
 
-    // Bean for AuthenticationManager (since we aren't extending WebSecurityConfigurerAdapter)
+
+    // Bean for AuthenticationManager
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
