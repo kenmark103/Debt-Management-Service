@@ -24,7 +24,7 @@ public class JwtAndLicenseGatewayFilter extends AbstractGatewayFilterFactory<Jwt
     private final JwtTokenProvider jwtTokenProvider; // Assuming you have this from auth service
     private final WebClient webClient;
     
-    private final List<String> publicPaths = Arrays.asList("/api/auth/register", "/api/auth/login", "/api/license/purchase");
+    private final List<String> publicPaths = Arrays.asList("/api/auth/register", "/api/auth/login", "/api/license/purchase", "/eureka/**");
     private final List<String> authOnlyPaths = Arrays.asList("/api/license/status", "/api/user/profile");
 
 
