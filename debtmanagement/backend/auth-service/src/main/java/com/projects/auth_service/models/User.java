@@ -12,7 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "`User`")
+@Table(name = "app_users")
 public class User {
 
     @Id

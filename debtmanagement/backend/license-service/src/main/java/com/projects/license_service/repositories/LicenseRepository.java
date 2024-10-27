@@ -6,4 +6,6 @@ import com.projects.license_service.models.License;
 
 public interface  LicenseRepository extends JpaRepository<License, Long> {
     License findByLicenseKey(String licenseKey);
+
+    License findByAssignedTo(String username);
 }

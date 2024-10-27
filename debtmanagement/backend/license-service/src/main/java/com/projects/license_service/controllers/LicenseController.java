@@ -27,7 +27,7 @@ public class LicenseController {
     }
 
     @GetMapping("/validate")
-    public boolean validateLicense(@RequestParam String licenseKey) {
-        return licenseService.validateLicense(licenseKey);
+    public boolean validateLicense(@RequestParam String username) {
+        return licenseService.validateLicense(username);
     }
 }
