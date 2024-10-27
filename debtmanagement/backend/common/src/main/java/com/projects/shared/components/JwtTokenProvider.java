@@ -4,67 +4,70 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 
 @Component
 public class JwtTokenProvider {
+    private final SecretKey secretKey;
+    private final long expirationTimeInMs;
 
-    @Value("${jwt.secret}")
-    private String secretString;
-
-    @Value("${jwt.expiration}")
-    private long expirationTime;
-
-    private SecretKey secretKey;
-
-    @PostConstruct
-    public void init() {
-        this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretString));
+    public JwtTokenProvider(String secretString, long expirationTimeInMs) {
+        this.secretKey = Keys.hmacShaKeyFor(secretString.getBytes());
+        this.expirationTimeInMs = expirationTimeInMs;
     }
 
+    // Generate JWT token
     public String generateToken(String username, String role) {
         Date now = new Date();
-        Date validity = new Date(now.getTime() + expirationTime);
+        Date expiryDate = new Date(now.getTime() + expirationTimeInMs);
 
         return Jwts.builder()
-                .claim("role", role)
-                .subject(username)
-                .issuedAt(now)
-                .expiration(validity)
-                .signWith(secretKey)
-                .compact();
+            .claim("Role", role)
+            .subject(username)
+            .issuedAt(now)
+            .expiration(expiryDate)
+            .signWith(secretKey)
+            .compact();
     }
 
+    // Validate token
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
-            return true;
+            Claims claims = Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+            
+            // Check if the token has expired
+            return !claims.getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
 
+    // Extract username from token
     public String getUsernameFromToken(String token) {
-        return getClaimsFromToken(token).getSubject();
+        Claims claims = Jwts.parser()
+            .verifyWith(secretKey)
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
+        return claims.getSubject();
     }
 
+    // Extract role from token
     public String getRoleFromToken(String token) {
-        return getClaimsFromToken(token).get("role", String.class);
-    }
-
-    private Claims getClaimsFromToken(String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        Claims claims = Jwts.parser()
+            .verifyWith(secretKey)
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
+        return claims.get("Role", String.class);
     }
 }

@@ -3,18 +3,22 @@ package com.projects.api_gateway_service.middleware;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 
 import com.projects.shared.components.JwtTokenProvider;
+import com.projects.shared.config.SharedConfig;
 
 import reactor.core.publisher.Mono;
 
 @Component
+@Import(SharedConfig.class)
 public class JwtAndLicenseGatewayFilter extends AbstractGatewayFilterFactory<JwtAndLicenseGatewayFilter.Config> {
 
     private final JwtTokenProvider jwtTokenProvider; // Assuming you have this from auth service
@@ -24,7 +28,7 @@ public class JwtAndLicenseGatewayFilter extends AbstractGatewayFilterFactory<Jwt
     private final List<String> authOnlyPaths = Arrays.asList("/api/license/status", "/api/user/profile");
 
 
-
+    @Autowired
     public JwtAndLicenseGatewayFilter(JwtTokenProvider jwtTokenProvider, WebClient.Builder webClientBuilder) {
         super(Config.class);
         this.jwtTokenProvider = jwtTokenProvider;
