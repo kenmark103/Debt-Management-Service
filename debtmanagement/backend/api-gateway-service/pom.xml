@@ -66,11 +66,11 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
 			 <exclusions>
-        <exclusion>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+        		<exclusion>
+            		<groupId>org.springframework.boot</groupId>
+           			 <artifactId>spring-boot-starter-web</artifactId>
 				</exclusion>
-				</exclusions>
+			</exclusions>
 		</dependency>
 
 		<dependency>
