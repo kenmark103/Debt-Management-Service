@@ -25,9 +25,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Disable CSRF protection
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.disable()) // Disable CSRF protection
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/auth/**", "/h2-console/**").permitAll()  // Permit all auth requests and H2 console
+                .requestMatchers("/auth/register", "/auth/login", "/h2-console/**").permitAll()  // Permit all auth requests and H2 console
                 .requestMatchers("/admin/**").hasRole("ADMIN")  // Only ADMIN can access /admin
                 .anyRequest().authenticated()  // All other requests require authentication
             )
