@@ -1,6 +1,7 @@
 package com.projects.auth_service.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.UUID;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +16,8 @@ import com.projects.auth_service.models.User;
 import com.projects.auth_service.repositories.RoleRepository;
 import com.projects.auth_service.repositories.UserRepository;
 
+import jakarta.annotation.PostConstruct;
+
 @Service
 public class AuthService {
 
@@ -22,15 +25,16 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
-
-    public AuthService(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthService(AuthenticationManager authenticationManager, 
+    JwtTokenProvider jwtTokenProvider, UserRepository userRepository, 
+    PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     public String authenticate(String username, String password) {
@@ -41,22 +45,24 @@ public class AuthService {
         String role = userDetails.getAuthorities().stream()
             .findFirst() 
             .map(GrantedAuthority::getAuthority)
-            .orElse("USER_ROLE");
+            .orElse("ROLE_USER");
         return jwtTokenProvider.generateToken(userDetails.getUsername(), role);
     }
 
-    public boolean registerUser(String username, String password, String email, String roleName) {
-        if (userRepository.findByUsername(username).isPresent()) {
-            return false; // User already exists
-        }
+    @PostConstruct
+    public void init() {
 
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setEmail(email);
-        Role role = roleRepository.findByName(roleName);
-        user.setRole(role);
-        userRepository.save(user);
-        return true;
+            Role role = new Role();
+            role.setId(UUID.randomUUID());
+            role.setName("ROLE_ADMIN");
+            roleRepository.save(role);
+
+            User user = new User();
+            user.setId(UUID.randomUUID());
+            user.setUsername("admin");
+            user.setEmail("adminSuper@mail.com");
+            user.setPassword(passwordEncoder.encode("password"));
+            user.setRole(roleRepository.findByName("ROLE_ADMIN"));
+            userRepository.save(user);
     }
 }

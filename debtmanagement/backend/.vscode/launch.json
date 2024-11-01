@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "EurekaServerApplication",
+            "request": "launch",
+            "mainClass": "com.projects.eureka_server.EurekaServerApplication",
+            "projectName": "eureka-server"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"

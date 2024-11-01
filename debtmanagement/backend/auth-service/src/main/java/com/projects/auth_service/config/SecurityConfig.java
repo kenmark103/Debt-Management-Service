@@ -28,7 +28,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.disable()) // Disable CSRF protection
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/auth/register", "/auth/login", "/h2-console/**").permitAll()  // Permit all auth requests and H2 console
+                .requestMatchers("/auth/getUsers","/auth/register", "/auth/login", "/h2-console/**","/actuator/**").permitAll()  // Permit all auth requests and H2 console
                 .requestMatchers("/admin/**").hasRole("ADMIN")  // Only ADMIN can access /admin
                 .anyRequest().authenticated()  // All other requests require authentication
             )

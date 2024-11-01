@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,7 +56,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/register")
+    @PostMapping("/registered")
     public ResponseEntity<?> register(@Valid @RequestBody AuthRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
@@ -67,5 +68,13 @@ public class AuthController {
         } catch (UserAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
         }
+    }
+    @GetMapping("getUsers")
+    public AuthResponse getSomeDetails(){
+        AuthResponse authR = new AuthResponse(
+            "VTfsf6636335356262838738733","thank you for testing"
+            );
+            return authR;
+
     }
 }
