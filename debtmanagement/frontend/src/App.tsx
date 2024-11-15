@@ -142,6 +142,9 @@ function App() {
             </>
           }
         />
+           <Route path="/auth/signin" element={<SignIn />} />
+      <Route path="/auth/signup" element={<SignUp />} />
+
       </Routes>
     </DefaultLayout>
   );
